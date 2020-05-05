@@ -1,0 +1,20 @@
+plugins {
+    id 'java'
+}
+
+group 'org.org.team1619'
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://jitpack.io'
+    }
+}
+
+dependencies {
+    implementation 'com.github.team1619:uacr-robot-core:6225c02'
+
+    implementation (group: 'com.google.guava', name: 'guava', version: '25.1-jre')
+
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+}
