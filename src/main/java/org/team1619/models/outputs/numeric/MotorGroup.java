@@ -37,7 +37,7 @@ public class MotorGroup extends OutputNumeric {
             }
 
             Motor slave = (Motor) motor;
-            slave.setHardware("follower", fMaster.getDeviceNumber(), "none");
+            //slave.setHardware("follower", fMaster.getPort(), "none");
             fSlaves.add(slave);
         }
     }
@@ -53,7 +53,7 @@ public class MotorGroup extends OutputNumeric {
 
         // Uncomment this to read position, velocity, or current on follower motors
         for (Motor slave : fSlaves) {
-            slave.setHardware(outputType, fMaster.getDeviceNumber(), profile);
+            //slave.setHardware(outputType, fMaster.getPort(), profile);
         }
     }
 }

@@ -1,5 +1,7 @@
 package org.team1619.robot;
 
+import org.team1619.models.inputs.bool.robot.RobotControllerButton;
+import org.team1619.models.inputs.numeric.robot.RobotControllerAxis;
 import org.team1619.models.inputs.vector.Odometry;
 import org.team1619.models.inputs.vector.robot.RobotGyro;
 import org.team1619.models.outputs.numeric.MotorGroup;
@@ -10,10 +12,7 @@ import org.uacr.models.inputs.vector.InputVector;
 import org.uacr.models.outputs.bool.OutputBoolean;
 import org.uacr.models.outputs.numeric.OutputNumeric;
 import org.uacr.robot.AbstractModelFactory;
-import org.uacr.shared.abstractions.InputValues;
-import org.uacr.shared.abstractions.ObjectsDirectory;
-import org.uacr.shared.abstractions.OutputValues;
-import org.uacr.shared.abstractions.RobotConfiguration;
+import org.uacr.shared.abstractions.*;
 import org.uacr.utilities.Config;
 import org.uacr.utilities.YamlConfigParser;
 import org.uacr.utilities.injection.Inject;
@@ -24,9 +23,12 @@ public class AbstractRobotModelFactory extends AbstractModelFactory {
 
     private static final Logger sLogger = LogManager.getLogger(AbstractRobotModelFactory.class);
 
+    private final EventBus fEventBus;
+
     @Inject
-    public AbstractRobotModelFactory(InputValues inputValues, OutputValues outputValues, RobotConfiguration robotConfiguration, ObjectsDirectory objectsDirectory) {
+    public AbstractRobotModelFactory(EventBus eventBus, InputValues inputValues, OutputValues outputValues, RobotConfiguration robotConfiguration, ObjectsDirectory objectsDirectory) {
         super(inputValues, outputValues, robotConfiguration, objectsDirectory);
+        fEventBus = eventBus;
     }
 
     @Override
@@ -58,6 +60,8 @@ public class AbstractRobotModelFactory extends AbstractModelFactory {
         sLogger.trace("Creating input boolean '{}' of type '{}' with config '{}'", name, config.getType(), config.getData());
 
         switch (config.getType()) {
+            case "controller_button":
+                return new RobotControllerButton(fEventBus, name, config);
             default:
                 return super.createInputBoolean(name, config);
         }
@@ -68,6 +72,8 @@ public class AbstractRobotModelFactory extends AbstractModelFactory {
         sLogger.trace("Creating input numeric '{}' of type '{}' with config '{}'", name, config.getType(), config.getData());
 
         switch (config.getType()) {
+            case "controller_axis":
+                return new RobotControllerAxis(fEventBus, name, config);
             default:
                 return super.createInputNumeric(name, config);
         }

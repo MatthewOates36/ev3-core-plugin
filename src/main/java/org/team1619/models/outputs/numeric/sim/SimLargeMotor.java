@@ -20,7 +20,7 @@ public class SimLargeMotor extends LargeMotor {
     private final SimInputNumericListener fVelocityListener;
     private double fOutput = 0.0;
     @Nullable
-    private Integer fMotor;
+    private String fMotor;
 
     public SimLargeMotor(Object name, Config config, EventBus eventBus, ObjectsDirectory objectsDirectory, InputValues inputValues) {
         super(name, config, inputValues);
@@ -28,11 +28,11 @@ public class SimLargeMotor extends LargeMotor {
         fPositionListener = new SimInputNumericListener(eventBus, fPositionInputName);
         fVelocityListener = new SimInputNumericListener(eventBus, fVelocityInputName);
 
-        // Included to mimic RobotTalon for testing
-        fMotor = (Integer) objectsDirectory.getHardwareObject(fPort);
+        // Included to mimic RobotLargeMotor for testing
+        fMotor = (String) objectsDirectory.getHardwareObject(fPort);
         //noinspection ConstantConditions
         if (fMotor == null) {
-            Integer port = fPort;
+            String port = fPort;
             fMotor = port;
             objectsDirectory.setHardwareObject(fPort, fMotor);
         }

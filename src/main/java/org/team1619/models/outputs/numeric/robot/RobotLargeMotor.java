@@ -3,6 +3,7 @@ package org.team1619.models.outputs.numeric.robot;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.motor.UnregulatedMotor;
 import lejos.hardware.port.MotorPort;
+import lejos.hardware.port.Port;
 import org.team1619.models.outputs.numeric.LargeMotor;
 import org.uacr.shared.abstractions.InputValues;
 import org.uacr.shared.abstractions.ObjectsDirectory;
@@ -27,9 +28,29 @@ public class RobotLargeMotor extends LargeMotor {
         fSharedObjectsDirectory = objectsDirectory;
 
         @Nullable
+        Port port;
+
+        switch (fPort) {
+            case "A":
+                port = MotorPort.A;
+                break;
+            case "B":
+                port = MotorPort.B;
+                break;
+            case "C":
+                port = MotorPort.C;
+                break;
+            case "D":
+                port = MotorPort.D;
+                break;
+            default:
+                throw new RuntimeException("Motor Port " + fPort + " doesn't exist");
+        }
+
+        @Nullable
         Object regulatedMotorObject = fSharedObjectsDirectory.getHardwareObject(fPort + "regulated");
         if (regulatedMotorObject == null) {
-            fRegulatedMotor = new EV3LargeRegulatedMotor(MotorPort.A);
+            fRegulatedMotor = new EV3LargeRegulatedMotor(port);
             fSharedObjectsDirectory.setHardwareObject(fPort + "regulated", fRegulatedMotor);
         } else {
             fRegulatedMotor = (EV3LargeRegulatedMotor) regulatedMotorObject;
@@ -38,7 +59,7 @@ public class RobotLargeMotor extends LargeMotor {
         @Nullable
         Object unregulatedMotorObject = fSharedObjectsDirectory.getHardwareObject(fPort + "unregulated");
         if (unregulatedMotorObject == null) {
-            fUnregulatedMotor = new UnregulatedMotor(MotorPort.A);
+            fUnregulatedMotor = new UnregulatedMotor(port);
             fSharedObjectsDirectory.setHardwareObject(fPort + "unregulated", fUnregulatedMotor);
         } else {
             fUnregulatedMotor = (UnregulatedMotor) unregulatedMotorObject;
@@ -83,9 +104,25 @@ public class RobotLargeMotor extends LargeMotor {
                     }
                 }
                 break;
-            case "follower":
+            case "velocity":
+                outputValue = outputValue / 360;
+                if(outputValue < 0.0) {
+                    fRegulatedMotor.setSpeed((int) outputValue);
+                    fRegulatedMotor.backward();
+                } else if(outputValue > 0.0) {
+                    fRegulatedMotor.setSpeed((int) outputValue);
+                    fRegulatedMotor.forward();
+                } else {
+                    if(fIsBrakeModeEnabled) {
+                        fRegulatedMotor.stop();
+                    } else {
+                        fRegulatedMotor.flt();
+                    }
+                }
                 break;
             case "position":
+                fRegulatedMotor.setSpeed(fRegulatedMotor.getMaxSpeed());
+                fRegulatedMotor.setAcceleration((int) fRegulatedMotor.getMaxSpeed());
                 fRegulatedMotor.rotateTo((int) outputValue, true);
                 break;
             default:

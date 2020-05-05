@@ -1,5 +1,7 @@
 package org.team1619.robot;
 
+import org.team1619.models.inputs.bool.sim.SimControllerButton;
+import org.team1619.models.inputs.numeric.sim.SimControllerAxis;
 import org.team1619.models.inputs.vector.sim.SimGyro;
 import org.team1619.models.outputs.numeric.MotorGroup;
 import org.team1619.models.outputs.numeric.sim.SimLargeMotor;
@@ -56,6 +58,8 @@ public class AbstractSimModelFactory extends AbstractModelFactory {
         sLogger.trace("Creating input boolean '{}' of type '{}' with config '{}'", name, config.getType(), config.getData());
 
         switch (config.getType()) {
+            case "controller_button":
+                return new SimControllerButton(fEventBus, name, config);
             default:
                 return super.createInputBoolean(name, config);
         }
@@ -66,6 +70,8 @@ public class AbstractSimModelFactory extends AbstractModelFactory {
         sLogger.trace("Creating input numeric '{}' of type '{}' with config '{}'", name, config.getType(), config.getData());
 
         switch (config.getType()) {
+            case "controller_axis":
+                return new SimControllerAxis(fEventBus, name, config);
             default:
                 return super.createInputNumeric(name, config);
         }

@@ -9,17 +9,17 @@ import org.uacr.utilities.Config;
 
 public abstract class Motor extends OutputNumeric {
 
-    protected final int fPort;
+    protected final String fPort;
     protected final boolean fIsBrakeModeEnabled;
 
     public Motor(Object name, Config config) {
         super(name, config);
 
-        fPort = config.getInt("port");
+        fPort = config.getString("port").trim().toUpperCase();
         fIsBrakeModeEnabled = config.getBoolean("brake_mode_enabled", true);
     }
 
-    public int getDeviceNumber() {
+    public String getPort() {
         return fPort;
     }
 }
