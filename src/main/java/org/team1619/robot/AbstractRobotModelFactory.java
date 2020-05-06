@@ -86,7 +86,7 @@ public class AbstractRobotModelFactory extends AbstractModelFactory {
         switch (config.getType()) {
             case "odometry_input":
                 return new Odometry(name, config, fSharedInputValues);
-            case "navx":
+            case "gyro":
                 return new RobotGyro(name, config);
             default:
                 return super.createInputVector(name, config);

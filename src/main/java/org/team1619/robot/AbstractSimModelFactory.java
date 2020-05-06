@@ -2,6 +2,7 @@ package org.team1619.robot;
 
 import org.team1619.models.inputs.bool.sim.SimControllerButton;
 import org.team1619.models.inputs.numeric.sim.SimControllerAxis;
+import org.team1619.models.inputs.vector.Odometry;
 import org.team1619.models.inputs.vector.sim.SimGyro;
 import org.team1619.models.outputs.numeric.MotorGroup;
 import org.team1619.models.outputs.numeric.sim.SimLargeMotor;
@@ -82,7 +83,9 @@ public class AbstractSimModelFactory extends AbstractModelFactory {
         sLogger.trace("Creating input vector '{}' of type '{}' with config '{}'", name, config.getType(), config.getData());
 
         switch (config.getType()) {
-            case "navx":
+            case "odometry_input":
+                return new Odometry(name, config, fSharedInputValues);
+            case "gyro":
                 return new SimGyro(fEventBus, name, config);
             default:
                 return super.createInputVector(name, config);
