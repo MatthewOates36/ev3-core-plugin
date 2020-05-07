@@ -76,7 +76,7 @@ public class RobotLargeMotor extends LargeMotor {
 
         switch (outputType) {
             case "velocity":
-                outputValue = outputValue / 360;
+                outputValue = outputValue * 360;
                 if(outputValue < 0.0) {
                     fRegulatedMotor.setSpeed((int) outputValue);
                     fRegulatedMotor.backward();
