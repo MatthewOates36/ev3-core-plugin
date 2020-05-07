@@ -26,7 +26,7 @@ public abstract class Gyro extends InputVector {
         // Is radians
         mIsRaidans = new HashMap<>();
         mIsRaidans.put("angle", config.getBoolean("angle_is_radians", false));
-        mIsInverted.put("rate", config.getBoolean("rate_is_radians", false));
+        mIsRaidans.put("rate", config.getBoolean("rate_is_radians", false));
     }
 
     @Override
