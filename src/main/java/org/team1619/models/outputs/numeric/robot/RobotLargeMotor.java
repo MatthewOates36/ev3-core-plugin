@@ -1,7 +1,6 @@
 package org.team1619.models.outputs.numeric.robot;
 
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
-import lejos.hardware.motor.UnregulatedMotor;
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.Port;
 import org.team1619.models.outputs.numeric.LargeMotor;
@@ -18,9 +17,7 @@ import javax.annotation.Nullable;
 public class RobotLargeMotor extends LargeMotor {
 
     private final EV3LargeRegulatedMotor fRegulatedMotor;
-    private final UnregulatedMotor fUnregulatedMotor;
     private ObjectsDirectory fSharedObjectsDirectory;
-    private String fCurrentProfileName = "none";
 
     public RobotLargeMotor(Object name, Config config, ObjectsDirectory objectsDirectory, InputValues inputValues) {
         super(name, config, inputValues);
@@ -55,15 +52,6 @@ public class RobotLargeMotor extends LargeMotor {
         } else {
             fRegulatedMotor = (EV3LargeRegulatedMotor) regulatedMotorObject;
         }
-
-        @Nullable
-        Object unregulatedMotorObject = fSharedObjectsDirectory.getHardwareObject(fPort + "unregulated");
-        if (unregulatedMotorObject == null) {
-            fUnregulatedMotor = new UnregulatedMotor(port);
-            fSharedObjectsDirectory.setHardwareObject(fPort + "unregulated", fUnregulatedMotor);
-        } else {
-            fUnregulatedMotor = (UnregulatedMotor) unregulatedMotorObject;
-        }
     }
 
     @Override
@@ -87,23 +75,6 @@ public class RobotLargeMotor extends LargeMotor {
         }
 
         switch (outputType) {
-            case "percent":
-                outputValue = outputValue * 100;
-                fRegulatedMotor.suspendRegulation();
-                if(outputValue < 0.0) {
-                    fUnregulatedMotor.setPower((int) outputValue);
-                    fUnregulatedMotor.backward();
-                } else if(outputValue > 0.0) {
-                    fUnregulatedMotor.setPower((int) outputValue);
-                    fUnregulatedMotor.forward();
-                } else {
-                    if(fIsBrakeModeEnabled) {
-                        fUnregulatedMotor.stop();
-                    } else {
-                        fUnregulatedMotor.flt();
-                    }
-                }
-                break;
             case "velocity":
                 outputValue = outputValue / 360;
                 if(outputValue < 0.0) {
