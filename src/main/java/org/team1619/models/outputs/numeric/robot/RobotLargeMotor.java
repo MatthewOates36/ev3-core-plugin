@@ -19,10 +19,16 @@ public class RobotLargeMotor extends LargeMotor {
     private final EV3LargeRegulatedMotor fRegulatedMotor;
     private ObjectsDirectory fSharedObjectsDirectory;
 
+    private String mCurrentOutputType;
+    private double mCurrentOutputValue;
+
     public RobotLargeMotor(Object name, Config config, ObjectsDirectory objectsDirectory, InputValues inputValues) {
         super(name, config, inputValues);
 
         fSharedObjectsDirectory = objectsDirectory;
+
+        mCurrentOutputType = "";
+        mCurrentOutputValue = 0.0;
 
         @Nullable
         Port port;
@@ -73,6 +79,13 @@ public class RobotLargeMotor extends LargeMotor {
         if (fReadVelocity) {
             readEncoderVelocity();
         }
+
+        if(outputType.equals(mCurrentOutputType) && outputValue == mCurrentOutputValue) {
+            return;
+        }
+
+        mCurrentOutputType = outputType;
+        mCurrentOutputValue = outputValue;
 
         switch (outputType) {
             case "percent":
