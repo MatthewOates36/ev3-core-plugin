@@ -75,6 +75,7 @@ public class RobotLargeMotor extends LargeMotor {
         }
 
         switch (outputType) {
+            case "percent":
             case "velocity":
                 outputValue = outputValue * 360;
                 if(outputValue < 0.0) {
